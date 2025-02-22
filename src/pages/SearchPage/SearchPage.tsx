@@ -10,12 +10,9 @@ import {
   TextField,
 } from '@mui/material';
 import PrintsList from '../../components/PrintsList';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export type SearchPageProps = {};
-
-function ExpandMoreIcon() {
-  return null;
-}
 
 const SearchPage = (props: SearchPageProps) => {
   return (
@@ -70,14 +67,6 @@ const SearchPage = (props: SearchPageProps) => {
       <PrintsList />
 
       <div className={styles.searchResult}>sfasdf</div>
-
-      <Pagination
-        className={styles.pagination}
-        count={110}
-        defaultPage={6}
-        siblingCount={1}
-        boundaryCount={1}
-      />
     </div>
   );
 };

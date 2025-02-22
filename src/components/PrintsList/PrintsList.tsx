@@ -1,24 +1,22 @@
 import styles from './PrintsList.module.css';
-import {Button, ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {ToggleButton, ToggleButtonGroup} from '@mui/material';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import {SORT_TYPE, VIEW_TYPE} from '../../values.ts';
 import {SyntheticEvent, useEffect, useState} from 'react';
-import {$prints, getPrints, toggleFavourite} from '@stores/prints.ts';
+import {$prints, getPrints} from '@stores/prints.ts';
 import {useStore} from '@nanostores/react';
-import time from '@utils/time.ts';
-import $auth from '@stores/auth.ts';
 import classNames from 'classnames';
+import FavoriteButton from '@components/FavoriteButton';
+import Time from '@components/Time';
 
 export type PageControlsProps = {
   userId?: string;
 };
 
 const PrintsList = ({userId}: PageControlsProps) => {
-  const auth = useStore($auth);
   const [viewType, setViewType] = useState(VIEW_TYPE.TILES);
   const [sortType, setSortType] = useState(SORT_TYPE.PUBLISHED);
   const onViewToggle = (_e: SyntheticEvent, view: string) => {
@@ -26,9 +24,6 @@ const PrintsList = ({userId}: PageControlsProps) => {
   };
   const onSortToggle = (_e: SyntheticEvent, sort: string) => {
     if (sort) setSortType(sort);
-  };
-  const handleAddToFavourite = (printId: string, isFavourite: boolean) => {
-    toggleFavourite(printId, auth.uid, isFavourite);
   };
 
   const data = useStore($prints);
@@ -48,7 +43,6 @@ const PrintsList = ({userId}: PageControlsProps) => {
           [styles.listView]: viewType === VIEW_TYPE.LIST,
         })}>
         {prints?.map((item, index) => {
-          const date = time(item.published);
           return (
             <a href={'/print/' + item.id} className={styles.print} key={index}>
               {Array.isArray(item.images) && item.images[0] ? (
@@ -63,28 +57,12 @@ const PrintsList = ({userId}: PageControlsProps) => {
                 <h3 className={styles.summary}>{item.summary}</h3>
                 <h3 className={styles.description}>{item.description}</h3>
                 <div className={styles.printInfoBottom}>
-                  <div
-                    className={
-                      styles.date
-                    }>{`${date.day} ${date.monthName} ${date.year}`}</div>
-                  <div className={styles.rating}>
-                    <Button
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleAddToFavourite(item.id, item.isFavourite);
-                      }}
-                      size={'small'}
-                      variant={'outlined'}
-                      endIcon={
-                        item.isFavourite ? (
-                          <FavoriteIcon />
-                        ) : (
-                          <FavoriteBorderIcon />
-                        )
-                      }>
-                      {item.rating}
-                    </Button>
-                  </div>
+                  <Time timeStr={item.updated || item.published} />
+                  <FavoriteButton
+                    printId={item.id}
+                    isFavourite={item.isFavourite}
+                    rating={item.rating}
+                  />
                 </div>
               </div>
             </a>

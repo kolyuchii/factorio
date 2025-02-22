@@ -1,0 +1,36 @@
+.blueprint {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+
+  .blueprintInfo {
+    display: flex;
+    gap: 0.8rem;
+    flex-direction: column;
+  }
+
+  .entities {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    .entity {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+
+      .entityImage {
+        width: 40px;
+        height: 40px;
+        background-color: #ffa100;
+        border-radius: 3px;
+      }
+
+      .entityCount {
+        width: 40px;
+        text-align: center;
+      }
+    }
+  }
+}
