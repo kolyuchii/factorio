@@ -1,0 +1,10 @@
+.mainPage {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 1;
+
+  @media (max-width: 1024px) {
+    padding: 0 10px;
+  }
+}

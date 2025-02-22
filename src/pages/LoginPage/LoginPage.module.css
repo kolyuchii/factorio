@@ -1,0 +1,8 @@
+.loginPage {
+  display: flex;
+  flex: 1;
+
+  @media (max-width: 1024px) {
+    padding: 0 10px;
+  }
+}

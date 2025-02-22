@@ -1,0 +1,12 @@
+.appWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 40px;
+    min-height: 100vh;
+    justify-content: space-between;
+
+    @media (max-width: 800px) {
+        gap: 20px;
+    }
+}

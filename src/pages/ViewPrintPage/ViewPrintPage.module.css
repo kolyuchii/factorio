@@ -1,0 +1,79 @@
+.viewPrintPage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1.8rem;
+
+  @media (max-width: 1024px) {
+    padding: 0 10px;
+  }
+
+  .name {
+    font-size: 1.5rem;
+  }
+
+  .description {
+  }
+
+  .summary {
+  }
+
+  .twoColumn {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    .gallery {
+      display: grid;
+      flex: 1;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto;
+
+      &.oneColumn {
+        grid-template-columns: 1fr;
+      }
+
+      &.twoColumn {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      &.threeColumn {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .image {
+        width: 100%;
+      }
+    }
+
+    .entities {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex-basis: 300px;
+
+      .entity {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        .entityImage {
+          width: 40px;
+        }
+
+        .entityCount {
+          font-weight: bold;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 50px;
+        }
+
+        .entityName {
+        }
+      }
+    }
+  }
+}
