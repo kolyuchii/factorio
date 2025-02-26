@@ -10,6 +10,7 @@ import FavoriteButton from '@components/FavoriteButton';
 import Time from '@components/Time';
 import Blueprint from '@components/Blueprint';
 import BlueprintBook from '@components/BlueprintBook';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 export type ViewPrintPageProps = {};
 
@@ -92,32 +93,45 @@ const ViewPrintPage = (props: ViewPrintPageProps) => {
 
       <div className={styles.twoColumn}>
         <div className={styles.infoColumn}>
-          <div>
+          <div className={styles.userName}>
             Author: <a href={'/user/' + print.author.id}>{print.author.name}</a>
           </div>
-          <div>
+          <div className={styles.date}>
             Created: <Time timeStr={print.published} />
           </div>
           {print.updated && (
-            <div>
+            <div className={styles.date}>
               Updated: <Time timeStr={print.updated} />
             </div>
           )}
-          <Button variant={'contained'}>Copy Blueprint</Button>
+          <Button startIcon={<ContentCopyIcon />} variant={'contained'}>
+            Copy Blueprint
+          </Button>
         </div>
         <div className={styles.dataColumn}>
-          <Box sx={{width: '100%'}}>
+          <Box sx={{width: '100%', overflowX: 'hidden'}}>
             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
               <Tabs
+                orientation={'vertical'}
                 value={value}
                 onChange={handleChange}
-                variant="scrollable"
-                scrollButtons="auto">
-                <Tab label="Description" {...a11yProps(0)} />
-                <Tab label="Blueprint" {...a11yProps(1)} />
-                <Tab label="Entities" {...a11yProps(2)} />
-                <Tab label="JSON" {...a11yProps(3)} />
-                <Tab label="Render" {...a11yProps(4)} />
+                variant="fullWidth">
+                <Tab
+                  iconPosition={'start'}
+                  label={'Description'}
+                  {...a11yProps(0)}
+                />
+                <Tab
+                  iconPosition={'start'}
+                  label={'Blueprint'}
+                  {...a11yProps(1)}
+                />
+                <Tab
+                  iconPosition={'start'}
+                  label={'Entities'}
+                  {...a11yProps(2)}
+                />
+                <Tab iconPosition={'start'} label={'JSON'} {...a11yProps(3)} />
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
@@ -152,9 +166,6 @@ const ViewPrintPage = (props: ViewPrintPageProps) => {
                   {JSON.stringify(bpJson, null, 2)}
                 </code>
               </div>
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={4}>
-              Render
             </CustomTabPanel>
           </Box>
         </div>

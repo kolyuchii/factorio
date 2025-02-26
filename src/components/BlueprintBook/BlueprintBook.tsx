@@ -7,7 +7,7 @@ export type BlueprintBookProps = {
 };
 
 const BlueprintBook = ({book}: BlueprintBookProps) => {
-  console.log('BlueprintBook_10', book);
+  if (!book) return null;
   return (
     <div className={styles.blueprintBook}>
       {book.blueprints.map((item) => (

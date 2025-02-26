@@ -53,22 +53,44 @@
         margin: 0 auto;
       }
 
-      .printImg {
-        width: 100%;
-        border-radius: 3px;
-        aspect-ratio: 16 / 9;
-        object-fit: contain;
-        background-color: #ffd68f;
+      .imageContainer {
+        position: relative;
+
+        .printImg {
+          width: 100%;
+          border-radius: 3px;
+          aspect-ratio: 16 / 9;
+          object-fit: contain;
+          background-color: #ffd68f;
+        }
+
+        .imageButton {
+          position: absolute;
+          top: 5px;
+          left: 5px;
+        }
+
+        .isBook {
+          position: absolute;
+          left: 5px;
+          bottom: 10px;
+          background-color: white;
+          border-radius: 2px;
+          padding: 0 10px;
+          font-size: 12px;
+          box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+          font-weight: bold;
+        }
       }
 
       .printInfo {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 8px;
 
         .printName {
           font-weight: bold;
-          font-size: 0.9rem;
+          font-size: 1rem;
 
           @media (max-width: 800px) {
             font-size: 1rem;
@@ -90,7 +112,7 @@
           align-items: center;
           justify-content: space-between;
           font-size: 0.8rem;
-          margin-top: 10px;
+          color: #935d00;
 
           .rating {
             display: flex;
@@ -137,7 +159,6 @@
 
         .printInfo {
           padding: 10px 0;
-          justify-content: space-between;
 
           @media (max-width: 600px) {
             padding: 0;
@@ -145,6 +166,8 @@
 
           .description {
             display: flex;
+            font-size: 1rem;
+            font-weight: normal;
 
             @media (max-width: 600px) {
               display: none;
@@ -152,7 +175,6 @@
           }
 
           .printInfoBottom {
-            flex-direction: row-reverse;
             gap: 1rem;
 
             @media (max-width: 600px) {

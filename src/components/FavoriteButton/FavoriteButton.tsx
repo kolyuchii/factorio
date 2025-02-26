@@ -40,7 +40,7 @@ const FavoriteButton = ({
           handleAddToFavourite(printId, isFavourite);
         }}
         size={size}
-        variant={'outlined'}
+        variant={'contained'}
         endIcon={isFavourite ? <FavoriteIcon /> : <FavoriteBorderIcon />}>
         {rating}
       </Button>
