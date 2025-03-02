@@ -1,11 +1,13 @@
 import styles from './CreatePage.module.css';
-import {Button, ButtonGroup, TextField} from '@mui/material';
+import {Button, ButtonGroup, IconButton, TextField} from '@mui/material';
 import {useState, ChangeEvent} from 'react';
 import {createPrint} from '@stores/prints.ts';
 import {v4 as uuidv4} from 'uuid';
 import {useStore} from '@nanostores/react';
 import $auth from '@stores/auth.ts';
 import {PrintType} from '@types';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export type CreatePageProps = {};
 
@@ -27,9 +29,10 @@ const CreatePage = (props: CreatePageProps) => {
   };
 
   const addImage = () => {
+    const id = uuidv4();
     setBlueprint(
       Object.assign({}, blueprint, {
-        images: [...blueprint.images, {id: uuidv4(), url: ''}],
+        images: [...blueprint.images, {id, url: ''}],
       }),
     );
   };
@@ -38,12 +41,21 @@ const CreatePage = (props: CreatePageProps) => {
     createPrint(blueprint);
   };
 
+  const onDeleteImage = (id: string) => {
+    setBlueprint(
+      Object.assign({}, blueprint, {
+        images: blueprint.images.filter((image) => image.id !== id),
+      }),
+    );
+  };
+
   return (
     <div className={styles.createPage}>
       <TextField
         id="outlined-basic"
         label="Title"
         variant="outlined"
+        required
         onInput={(e: ChangeEvent<HTMLInputElement>) => {
           update({name: e.target.value});
         }}
@@ -59,6 +71,7 @@ const CreatePage = (props: CreatePageProps) => {
         }}
       />
       <TextField
+        required
         id="outlined-basic"
         multiline
         label="Description"
@@ -72,6 +85,8 @@ const CreatePage = (props: CreatePageProps) => {
         {blueprint.images.map((image) => (
           <div className={styles.image} id={image.id}>
             <TextField
+              required={true}
+              size={'small'}
               id="outlined-basic"
               label="Image Url"
               variant="outlined"
@@ -86,17 +101,29 @@ const CreatePage = (props: CreatePageProps) => {
                 update(blueprint.images);
               }}
             />
-            <img alt={''} src={image.url} width={'100%'} />
-            <Button color={'secondary'} variant="contained">
-              delete Image
+            <img
+              alt={''}
+              src={image.url}
+              className={styles.imageItem}
+              width={'100%'}
+            />
+            <Button
+              size={'small'}
+              variant={'contained'}
+              startIcon={<DeleteOutlineIcon />}
+              onClick={() => onDeleteImage(image.id)}
+              className={styles.deleteImage}>
+              Delete
             </Button>
           </div>
         ))}
         <div className={styles.addImage} onClick={addImage}>
+          <AddCircleOutlineIcon />
           Add Image
         </div>
       </div>
       <TextField
+        required
         id="outlined-basic"
         label="Blueprint String"
         variant="outlined"

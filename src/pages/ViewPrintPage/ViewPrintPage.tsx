@@ -111,11 +111,7 @@ const ViewPrintPage = (props: ViewPrintPageProps) => {
         <div className={styles.dataColumn}>
           <Box sx={{width: '100%', overflowX: 'hidden'}}>
             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-              <Tabs
-                orientation={'vertical'}
-                value={value}
-                onChange={handleChange}
-                variant="fullWidth">
+              <Tabs value={value} onChange={handleChange} variant="fullWidth">
                 <Tab
                   iconPosition={'start'}
                   label={'Description'}
