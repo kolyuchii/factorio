@@ -1,15 +1,18 @@
 import styles from './LoginPage.module.css';
 import {Button} from '@mui/material';
 import googleAuth from '@utils/auth/google.ts';
+import GoogleIcon from '@mui/icons-material/Google';
 
-export type LoginPageProps = {};
-
-const LoginPage = (props: LoginPageProps) => {
+const LoginPage = () => {
   return (
     <div className={styles.loginPage}>
-      <div>
-        Log in with{' '}
-        <Button variant={'contained'} onClick={googleAuth}>
+      <div className={styles.options}>
+        <div className={styles.title}>Log in with</div>
+        <Button
+          size="large"
+          startIcon={<GoogleIcon />}
+          variant={'contained'}
+          onClick={googleAuth}>
           Google
         </Button>
       </div>

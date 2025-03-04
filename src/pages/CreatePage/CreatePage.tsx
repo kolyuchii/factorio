@@ -52,6 +52,7 @@ const CreatePage = (props: CreatePageProps) => {
   return (
     <div className={styles.createPage}>
       <TextField
+        size={'small'}
         id="outlined-basic"
         label="Title"
         variant="outlined"
@@ -59,8 +60,10 @@ const CreatePage = (props: CreatePageProps) => {
         onInput={(e: ChangeEvent<HTMLInputElement>) => {
           update({name: e.target.value});
         }}
+        className={styles.title}
       />
       <TextField
+        size={'small'}
         id="outlined-basic"
         multiline
         label="Summary"
@@ -71,12 +74,13 @@ const CreatePage = (props: CreatePageProps) => {
         }}
       />
       <TextField
+        size={'small'}
         required
         id="outlined-basic"
         multiline
         label="Description"
         variant="outlined"
-        minRows={8}
+        minRows={6}
         onInput={(e: ChangeEvent<HTMLInputElement>) => {
           update({description: e.target.value});
         }}
@@ -85,6 +89,7 @@ const CreatePage = (props: CreatePageProps) => {
         {blueprint.images.map((image) => (
           <div className={styles.image} id={image.id}>
             <TextField
+              className={styles.imageUrl}
               required={true}
               size={'small'}
               id="outlined-basic"
@@ -123,12 +128,13 @@ const CreatePage = (props: CreatePageProps) => {
         </div>
       </div>
       <TextField
+        size={'small'}
         required
         id="outlined-basic"
         label="Blueprint String"
         variant="outlined"
         multiline
-        minRows={8}
+        minRows={3}
         onInput={(e: ChangeEvent<HTMLInputElement>) => {
           update({blueprint: e.target.value});
         }}
@@ -138,17 +144,9 @@ const CreatePage = (props: CreatePageProps) => {
         <Button color={'secondary'} variant="contained">
           Cancel
         </Button>
-        <ButtonGroup variant="contained" aria-label="Basic button group">
-          <Button color={'primary'} variant="contained">
-            Save as Draft
-          </Button>
-          <Button
-            color={'primary'}
-            variant="contained"
-            onClick={saveAndPublish}>
-            Save and Publish
-          </Button>
-        </ButtonGroup>
+        <Button color={'primary'} variant="contained" onClick={saveAndPublish}>
+          Save
+        </Button>
       </div>
     </div>
   );

@@ -4,32 +4,40 @@ import {
   AccordionActions,
   AccordionDetails,
   AccordionSummary,
+  Autocomplete,
   Button,
   ButtonGroup,
   Pagination,
   TextField,
+  FormControl,
 } from '@mui/material';
 import PrintsList from '../../components/PrintsList';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {useState} from 'react';
+import {PrintType} from '@types';
 
 export type SearchPageProps = {};
 
 const SearchPage = (props: SearchPageProps) => {
+  const [options, setOptions] = useState<PrintType[]>([]);
+  const onSearch = () => {
+    console.log('onSearch_23');
+    setTimeout(() => setOptions([{title: '111'}, {title: '222'}]), 4000);
+  };
+
+  const onEnter = (e) => {
+    e.preventDefault();
+    console.log('onEnter_23');
+  };
+
   return (
     <div className={styles.searchPage}>
-      <div className={styles.searchBox}>
-        <ButtonGroup variant="contained">
-          <TextField
-            className={styles.searchBoxText}
-            id="outlined-basic"
-            label="Outlined"
-            variant="outlined"
-          />
-          <Button color={'primary'} className={styles.searchBoxButton}>
-            Search
-          </Button>
-        </ButtonGroup>
-      </div>
+      <form onSubmit={onEnter} className={styles.searchBox}>
+        <TextField className={styles.searchBoxText} size={'small'} />
+        <Button size={'medium'} variant={'contained'} type={'submit'}>
+          Search
+        </Button>
+      </form>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
