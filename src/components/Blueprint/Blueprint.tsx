@@ -1,6 +1,7 @@
 import styles from './Blueprint.module.css';
 import {BlueprintType} from '@types';
-import {SyntheticEvent} from 'react';
+import {SyntheticEvent, useState} from 'react';
+import classNames from 'classnames';
 
 export type BlueprintProps = {
   blueprint: BlueprintType;
@@ -11,6 +12,7 @@ const Blueprint = ({blueprint}: BlueprintProps) => {
   const onChangeEntity = (event: SyntheticEvent) => {
     console.log('onChangeEntity_47');
   };
+  const [activeItem, setActiveItem] = useState(null);
 
   const entities = {};
   const mapSize = {
@@ -35,21 +37,32 @@ const Blueprint = ({blueprint}: BlueprintProps) => {
   });
 
   const map = Array.from(
-    Array(Math.abs(mapSize.y.max - mapSize.y.min) * 2 + 1),
-    () => new Array(Math.abs(mapSize.x.max - mapSize.x.min) * 2 + 1).fill(null),
+    Array(Math.abs(mapSize.y.max - mapSize.y.min) * 2 + 11),
+    () =>
+      new Array(Math.abs(mapSize.x.max - mapSize.x.min) * 2 + 11).fill(null),
   );
 
   eRec.forEach((item) => {
-    map[Math.abs(mapSize.y.min - item.position.y) * 2][
-      Math.abs(mapSize.x.min - item.position.x) * 2
-    ] = item;
+    const row = Math.abs(mapSize.y.min - item.position.y) * 2 + 5;
+    const col = Math.abs(mapSize.x.min - item.position.x) * 2 + 5;
+    map[row][col] = item;
+
+    if (item.name === 'assembling-machine-2') {
+      for (let xRow = row - 2; xRow < row + 3; xRow++) {
+        for (let xCol = col - 2; xCol < col + 3; xCol++) {
+          if ((xRow !== row || xCol !== col) && map[xRow]) {
+            map[xRow][xCol] = 0;
+          }
+        }
+      }
+    }
   });
 
   const entitiesArr = Object.entries(entities)
     .map((item) => ({
       name: item[0],
       count: item[1],
-      url: `/public/icons/entity/${item[0]}.png`,
+      url: `/icons/entity/${item[0]}.png`,
     }))
     .sort((a, b) => b.count - a.count);
 
@@ -82,19 +95,66 @@ const Blueprint = ({blueprint}: BlueprintProps) => {
           gridTemplateColumns: `repeat(${map[0].length}, 1fr)`,
           gridTemplateRows: `repeat(${map.length}, 1fr)`,
         }}>
-        {map.map((row) => {
-          return row.map((cell) => {
+        {map.map((row, rowIndex) => {
+          return row.map((cell, colIndex) => {
+            if (cell === 0) return null;
+            // if (cell === 0) return <div style={{backgroundColor: 'red'}} />;
+
             // cell.direction
             if (cell === null) {
-              return <div />;
+              return <div className={styles.cell} />;
             }
 
+            const getStyles = () => {
+              if (cell.name === 'assembling-machine-2') {
+                return {
+                  gridArea: `${Math.max(rowIndex + 1 - 2, 0)} / ${Math.max(colIndex + 1 - 2, 0)} / ${Math.max(rowIndex + 1 + 3, 0)} / ${Math.max(colIndex + 1 + 3, 0)}`,
+                };
+              }
+
+              return {};
+            };
+
+            const id = `w${(rowIndex + 1) * (colIndex + 1)}-${rowIndex + 1}-${colIndex + 1}`;
+
+            const getContent = () => {
+              if (cell.request_filters) {
+                return (
+                  <div
+                    className={classNames(styles.cellContent, {
+                      [styles.active]: id === activeItem,
+                    })}>
+                    {cell.request_filters.map((item) => (
+                      <div className={styles.cellContentItem}>
+                        <img
+                          alt={item.name}
+                          src={`/icons/entity/${item.name}.png`}
+                          className={styles.entityImageContent}
+                        />
+                        <div className={styles.entityImageContentCount}>
+                          {item.count}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              return null;
+            };
+
             return (
-              <img
-                alt={cell.name}
-                src={`/public/icons/entity/${cell.name}.png`}
-                className={styles.entityImage}
-              />
+              <div
+                onClick={() => setActiveItem(id)}
+                className={classNames(styles.cell, styles.cellActive)}
+                style={getStyles()}>
+                <img
+                  id={id}
+                  alt={cell.name}
+                  src={`/icons/entity/${cell.name}.png`}
+                  className={styles.entityImage}
+                />
+                {getContent()}
+              </div>
             );
           });
         })}

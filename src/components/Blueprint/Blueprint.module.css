@@ -49,8 +49,63 @@
   .render {
     display: grid;
     gap: 1px;
-    background-color: #023047;
     padding: 10px;
+    background-color: #023047;
+
+    .renderItem {
+      aspect-ratio: 1 / 1;
+    }
+
+    .cell {
+      position: relative;
+      aspect-ratio: 1/1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &.cellActive {
+        cursor: pointer;
+      }
+
+      .cellContent {
+        position: absolute;
+        bottom: 0;
+        background-color: #fff;
+        border-radius: 3px;
+        flex-direction: row;
+        padding: 10px;
+        gap: 6px;
+        display: none;
+        z-index: 1000;
+
+        &.active {
+          display: flex;
+        }
+
+        .cellContentItem {
+          position: relative;
+          border: 1px solid black;
+          border-radius: 3px;
+          padding: 3px;
+
+          .entityImageContent {
+            width: 50px;
+          }
+
+          .entityImageContentCount {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            color: white;
+            font-weight: bold;
+            text-shadow: rgb(0, 0, 0) 0 0 3px;
+          }
+        }
+      }
+    }
 
     .entityImage {
       width: 100%;
