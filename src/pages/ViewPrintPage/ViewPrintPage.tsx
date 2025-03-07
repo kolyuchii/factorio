@@ -79,7 +79,7 @@ const ViewPrintPage = (props: ViewPrintPageProps) => {
           size="big"
           printId={print.id}
           isFavourite={print.isFavourite}
-          rating={print.rating}
+          initialRating={print.rating}
         />
       </div>
 

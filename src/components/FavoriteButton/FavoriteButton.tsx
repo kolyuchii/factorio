@@ -6,28 +6,34 @@ import {toggleFavourite} from '@stores/prints.ts';
 import {useStore} from '@nanostores/react';
 import $auth from '@stores/auth.ts';
 import {useState} from 'react';
+import {PrintType} from '@types';
 
 export type FavoriteButtonProps = {
   printId: string;
   isFavourite: boolean;
-  rating: number;
+  initialRating?: number;
   size: 'small' | 'medium' | 'large';
 };
 
 const FavoriteButton = ({
   printId,
-  isFavourite,
-  rating,
+  isFavourite = false,
+  initialRating = 0,
   size = 'medium',
 }: FavoriteButtonProps) => {
   const auth = useStore($auth);
   const [loading, setLoading] = useState<boolean>(false);
+  const [rating, setRating] = useState(initialRating);
+  const [favorite, setFavorite] = useState<PrintType>(isFavourite);
 
   const handleAddToFavourite = (printId: string, isFavourite: boolean) => {
     setLoading(true);
-    toggleFavourite(printId, auth.uid, isFavourite).finally(() =>
-      setLoading(false),
-    );
+    toggleFavourite(printId, auth.uid, isFavourite)
+      .then((data) => {
+        setRating(data.rating);
+        setFavorite(data.isFavourite);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -37,11 +43,11 @@ const FavoriteButton = ({
         loading={loading}
         onClick={(event) => {
           event.preventDefault();
-          handleAddToFavourite(printId, isFavourite);
+          handleAddToFavourite(printId, !!favorite);
         }}
         size={size}
         variant={'contained'}
-        endIcon={isFavourite ? <FavoriteIcon /> : <FavoriteBorderIcon />}>
+        endIcon={favorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}>
         {rating}
       </Button>
     </div>

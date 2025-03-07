@@ -47,7 +47,7 @@ const Blueprint = ({blueprint}: BlueprintProps) => {
     const col = Math.abs(mapSize.x.min - item.position.x) * 2 + 5;
     map[row][col] = item;
 
-    if (item.name === 'assembling-machine-2') {
+    if (item.name.includes('assembling-machine')) {
       for (let xRow = row - 2; xRow < row + 3; xRow++) {
         for (let xCol = col - 2; xCol < col + 3; xCol++) {
           if ((xRow !== row || xCol !== col) && map[xRow]) {

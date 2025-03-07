@@ -157,7 +157,25 @@ exports.getPrintById = onCall(async (request) => {
     console.log('No such document!');
     return null;
   } else {
-    return doc.data();
+    let favourites = null;
+    if (request.auth && request.auth.uid) {
+      const favDocRef = db.collection('favourites').doc(request.auth.uid);
+
+      await favDocRef.get().then(async (doc: any) => {
+        if (doc.exists) {
+          const docs = await favDocRef.get();
+          favourites = docs.data();
+        }
+      });
+    }
+
+    const data = doc.data();
+
+    if (favourites && data.id in favourites) {
+      data.isFavourite = favourites[data.id];
+    }
+
+    return data;
   }
 });
 
@@ -172,14 +190,16 @@ exports.toggleFavourite = onCall(async (request) => {
   const printId = request.data.printId;
   const userId = request.data.userId;
   const isFavourite = request.data.isFavourite;
+
   const printRef = db.collection('prints').doc(printId);
+  let newRating = 0;
 
   try {
     await db.runTransaction(async (transaction: any) => {
       const doc = await transaction.get(printRef);
 
       const oldRating = doc.data().rating;
-      let newRating = isFavourite ? oldRating - 1 : oldRating + 1;
+      newRating = isFavourite ? oldRating - 1 : oldRating + 1;
       if (newRating < 0) newRating = 0;
 
       transaction.update(printRef, {rating: newRating});
@@ -190,10 +210,22 @@ exports.toggleFavourite = onCall(async (request) => {
     console.log('Transaction failure:', e);
   }
 
-  return await db
-    .collection('favourites')
-    .doc(userId)
-    .update({
-      [printId]: !isFavourite,
-    });
+  const favDocRef = db.collection('favourites').doc(userId);
+
+  await favDocRef.get().then(async (doc: any) => {
+    if (!doc.exists) {
+      return await favDocRef.set({
+        [printId]: !isFavourite,
+      });
+    } else {
+      return await favDocRef.update({
+        [printId]: !isFavourite,
+      });
+    }
+  });
+
+  return {
+    rating: newRating,
+    isFavourite: !isFavourite,
+  };
 });

@@ -61,7 +61,7 @@ const PrintsList = ({userId}: PageControlsProps) => {
                     <FavoriteButton
                       printId={item.id}
                       isFavourite={item.isFavourite}
-                      rating={item.rating}
+                      initialRating={item.rating}
                     />
                   </div>
 
